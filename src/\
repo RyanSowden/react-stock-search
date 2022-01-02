@@ -20,6 +20,7 @@
   text-align: left;
   margin-left: 50px;
 }
+
 .App-link {
   color: #61dafb;
 }
@@ -32,12 +33,6 @@
     transform: rotate(360deg);
   }
 }
-
 .searchBar {
-	display: inline;
-	text-align: right;
-
-
-
+	margin-left: 50px;	
 }
-
