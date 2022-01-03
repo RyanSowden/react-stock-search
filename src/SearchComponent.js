@@ -15,9 +15,12 @@ class SearchComponent extends React.Component {
 	async  getData() {
 		const ticker =  this.state.value
 		try {
-			const response = await axios.post('http://localhost:2000/history',{ticker});
-			const result = await response
-			console.log(result)
+			const current_response = await axios.post('http://localhost:2000/current',{ticker});
+			const history_response = await axios.post('http://localhost:2000/history',{ticker});
+			const current_result = await current_response
+			const history_result = await history_response
+			console.log(current_result['data'].regularMarketPrice)
+			console.log(history_result['data'])
 		} catch(err) {
 			console.log(err)
 
@@ -37,7 +40,7 @@ class SearchComponent extends React.Component {
 	render(){
 		return (
 			<div>
-			<form onSubmit={this.handleSubmit}>
+			<form onSubmit={this.handleSubmit} id="form">
 			<input 
 			type="text"
 			value={this.state.value}
@@ -48,7 +51,7 @@ class SearchComponent extends React.Component {
 			/>
 			<button id="searchBtn" type="submit">Search</button>
 			</form>
-			<p>{this.state.message}</p>
+			<p>{this.state.messsage}</p>
 			</div>
 
 
