@@ -19,8 +19,16 @@ class SearchComponent extends React.Component {
 			const history_response = await axios.post('http://localhost:2000/history',{ticker});
 			const current_result = await current_response
 			const history_result = await history_response
-			console.log(current_result['data'].regularMarketPrice)
-			console.log(history_result['data'])
+			let current_price = (current_result['data'].regularMarketPrice)
+			let adjust_price = (current_result['data'].postMarketPrice)
+			this.setState({current_price: current_price})
+			this.setState({adjust_price: adjust_price})
+			//return(history_response['data'][0].close)
+			//return(history_response['data'][1].close)
+			//return(history_response['data'][2].close)
+			//return(history_response['data'][3].close)
+			//return(history_response['data'][4].close)
+    	 	
 		} catch(err) {
 			console.log(err)
 
@@ -33,7 +41,7 @@ class SearchComponent extends React.Component {
 	
 	handleSubmit(event){
 		event.preventDefault();
-		this.getData()
+		<p>{this.getData()}</p>
 
 	}
 
@@ -51,7 +59,8 @@ class SearchComponent extends React.Component {
 			/>
 			<button id="searchBtn" type="submit">Search</button>
 			</form>
-			<p>{this.state.messsage}</p>
+			<p>{this.state.current_price}</p>
+			<p>{this.state.adjust_price}</p>
 			</div>
 
 
