@@ -1,74 +1,89 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import ReactDom from 'react-dom';
 import axios from 'axios';
+import {Line, Bar} from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
 
+const SearchComponent = () =>  {
 
-class SearchComponent extends React.Component {
+	const [ticker,setTicker] = useState('')
+	const [result,setResult] = useState('')
 
+	
+	/*
+	componentDidMount(){
+		const [data,setData] = useState({});
 
-	constructor(props) {
-		super(props)
-		this.state = {value: ""};
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+		useEffect(() => {
+			setData({
+				labels: ['Jan','Feb','Mar'],
+				datasets: [
+					{
+				label: 'Test',
+					fill: false,
+					lineTension: 0.5,
+					backgroundColor: 'pink',
+					borderColor: 'black',
+					borderWidth: 2,
+					data: [1,2,3]
+			}
+				]
+		});
+	},[])
 	}
-	async  getData() {
-		const ticker =  this.state.value
+*/
+	
+	const handleChange = (e) => { 
+		setTicker(e.target.value); 
+	}
+
+	const getCurrentPrice = async ()  =>  {
+		const stock = ticker 
 		try {
 			const current_response = await axios.post('http://localhost:2000/current',{ticker});
-			const history_response = await axios.post('http://localhost:2000/history',{ticker});
+			//const history_response = await axios.post('http://localhost:2000/history',{ticker});
 			const current_result = await current_response
-			const history_result = await history_response
+			//const history_result = await history_response
 			let current_price = (current_result['data'].regularMarketPrice)
-			let adjust_price = (current_result['data'].postMarketPrice)
-			this.setState({current_price: current_price})
-			this.setState({adjust_price: adjust_price})
-			//return(history_response['data'][0].close)
-			//return(history_response['data'][1].close)
-			//return(history_response['data'][2].close)
-			//return(history_response['data'][3].close)
-			//return(history_response['data'][4].close)
-    	 	
+			//let adjust_price = (current_result['data'].postMarketPrice)
+			//let history_price = (history_result['data'][0].close)
+			setResult(current_price)
+
 		} catch(err) {
 			console.log(err)
-
 		};
 	}
-	
-	handleChange(event) { 
-		this.setState({value: event.target.value}); 
-	}
-	
-	handleSubmit(event){
-		event.preventDefault();
-		<p>{this.getData()}</p>
 
-	}
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		getCurrentPrice();
+		test();
+	};
 
-	render(){
-		return (
-			<div>
-			<form onSubmit={this.handleSubmit} id="form">
+
+	return (
+		<div>
+			<form onSubmit={handleSubmit} id="form">
 			<input 
 			type="text"
-			value={this.state.value}
-			onChange={this.handleChange}
+			value={ticker}
+			onChange={handleChange}
 			id="search"
 			placeholder="Stock Ticker"
-			name="s"
+			name="search"
 			/>
 			<button id="searchBtn" type="submit">Search</button>
+			<p>{result}</p>
 			</form>
-			<p>{this.state.current_price}</p>
-			<p>{this.state.adjust_price}</p>
-			</div>
+
+		</div>
 
 
-		);
-
-	}
+);
 
 }
+
+
 
 export default SearchComponent
 

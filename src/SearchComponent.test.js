@@ -4,35 +4,44 @@ import Enzyme from 'enzyme';
 import {shallow, mount} from 'enzyme';
 import {render, screen, fireEvent} from '@testing-library/react';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import renderer from 'react-test-renderer'
 
 Enzyme.configure({ adapter: new Adapter() });
 
-describe("Button test", () => {
-	it("should initialize index to 0", () => {
+describe("SearchComponent", () => {
+	it("should render properly", () => {
     	// check for initial state
-    	const app = shallow(<SearchComponent />);
-    	expect(app.state("value")).toEqual("");
+    	const app = renderer.create(<SearchComponent />);
+	expect(app).toMatchSnapshot();
   });
+	it('should render the search stock form ', () => {
+		const wrapper = shallow(<SearchComponent />)
+		expect(wrapper.find('form[id="form"]').exists()).toBe(true);
+	})
 
-	//check for the state to be updated.
-	it("Check for updates to the state value", () => {
-		const app = shallow(<SearchComponent />);
-		app.instance().setState({value: 'test'});
-		expect(app.state('value')).toEqual('test');
+	it('should render the search stock input tag', () => {
+		const wrapper = shallow(<SearchComponent />)
+		expect(wrapper.find('input[name="search"]').exists()).toBe(true);
+	})
+
+	it('should render the search button', () => {
+		const wrapper = shallow(<SearchComponent />)
+		expect(wrapper.find('button[id="searchBtn"]').exists()).toBe(true);
+	})
 	
-	});
-	it("Check if the current_price variable takes a value", () => {
-		const app = shallow(<SearchComponent />);
-		const current_price = 10;
-		app.instance().setState({current_price: current_price});
-		expect(app.state('current_price')).toEqual(10)
-	});
-
-	it("Check if the current_price variable takes a value", () => {
-		const app = shallow(<SearchComponent />);
-		const adjust_price = 10;
-		app.instance().setState({adjust_price: adjust_price});
-		expect(app.state('adjust_price')).toEqual(10)
-	});
-
+	it('the default value should be empty', () => {
+		const wrapper = shallow(<SearchComponent />)
+		expect(wrapper.find('input[name="search"]').prop('value')).toBe('');
+	})
+	it('on change of value in the field, the state of that field in the component should be updated', () => {
+		const wrapper = shallow(<SearchComponent />)
+		expect(wrapper.find('input[name="search"]').simulate('change', {
+			target: {
+				value: 'test',
+			},
+		})
+		);
+		expect(wrapper.find('input[name="search"]').prop('value')).toBe('test');
+	})
+	
 });
