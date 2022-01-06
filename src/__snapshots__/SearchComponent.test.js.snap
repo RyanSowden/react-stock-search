@@ -20,9 +20,9 @@ exports[`SearchComponent should render properly 1`] = `
     >
       Search
     </button>
-    <p>
-      
-    </p>
   </form>
+  <p>
+    
+  </p>
 </div>
 `;

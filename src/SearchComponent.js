@@ -7,8 +7,8 @@ import Chart from 'chart.js/auto';
 const SearchComponent = () =>  {
 
 	const [ticker,setTicker] = useState('')
-	const [result,setResult] = useState('')
-
+	const [currentStock,setCurrentStock] = useState('')
+	const [adjustedStock,setAdjustedStock] = useState('')
 	
 	/*
 	componentDidMount(){
@@ -29,7 +29,7 @@ const SearchComponent = () =>  {
 			}
 				]
 		});
-	},[])
+},[])
 	}
 */
 	
@@ -41,23 +41,41 @@ const SearchComponent = () =>  {
 		const stock = ticker 
 		try {
 			const current_response = await axios.post('http://localhost:2000/current',{ticker});
-			//const history_response = await axios.post('http://localhost:2000/history',{ticker});
 			const current_result = await current_response
 			//const history_result = await history_response
 			let current_price = (current_result['data'].regularMarketPrice)
 			//let adjust_price = (current_result['data'].postMarketPrice)
 			//let history_price = (history_result['data'][0].close)
-			setResult(current_price)
+			setCurrentStock(current_price)
 
 		} catch(err) {
 			console.log(err)
 		};
 	}
 
+
+	const getAjustedPrice = async ()  =>  {
+		const stock = ticker 
+		try {
+			const adjusted_response = await axios.post('http://localhost:2000/current',{ticker});
+			const adjusted_result = await adjusted_response
+			//const history_result = await history_response
+			let adjusted_price = (adjusted_result['data'].postMarketPrice)
+			//let history_price = (history_result['data'][0].close)
+			setAdjustedStock(adjusted_price)
+
+		} catch(err) {
+			console.log(err)
+		};
+	}
+
+
+
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		getCurrentPrice();
-		test();
+		getAjustedPrice();
 	};
 
 
@@ -73,13 +91,12 @@ const SearchComponent = () =>  {
 			name="search"
 			/>
 			<button id="searchBtn" type="submit">Search</button>
-			<p>{result}</p>
-			</form>
+		</form>
+			<p>{currentStock}</p>
+			<p>{adjustedStock}</p>
 
 		</div>
-
-
-);
+	);
 
 }
 
