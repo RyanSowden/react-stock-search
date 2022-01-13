@@ -3,6 +3,7 @@ import ReactDom from 'react-dom';
 import axios from 'axios';
 import {Line, Bar} from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
+import "./App.css"
 
 const SearchComponent = () =>  {
 
@@ -11,6 +12,7 @@ const SearchComponent = () =>  {
 	const [adjustedStock,setAdjustedStock] = useState('')
 	const [historyStock,setHistoryStock] = useState('')
 	const [historyDate, setHistoryDate] = useState('')
+	const [companyName, setCompanyName] = useState('')
 	
 	const handleChange = (e) => { 
 		setTicker(e.target.value); 
@@ -21,11 +23,10 @@ const SearchComponent = () =>  {
 		try {
 			const current_response = await axios.post('http://localhost:2000/current',{ticker});
 			const current_result = await current_response
-			//const history_result = await history_response
 			let current_price = (current_result['data'].regularMarketPrice)
-			//let adjust_price = (current_result['data'].postMarketPrice)
-			//let history_price = (history_result['data'][0].close)
+			let company_name = (current_result['data'].longName)
 			setCurrentStock(current_price)
+			setCompanyName(company_name)
 
 		} catch(err) {
 			console.log(err)
@@ -38,9 +39,7 @@ const SearchComponent = () =>  {
 		try {
 			const adjusted_response = await axios.post('http://localhost:2000/current',{ticker});
 			const adjusted_result = await adjusted_response
-			//const history_result = await history_response
 			let adjusted_price = (adjusted_result['data'].postMarketPrice)
-			//let history_price = (history_result['data'][0].close)
 			setAdjustedStock(adjusted_price)
 
 		} catch(err) {
@@ -83,9 +82,9 @@ const SearchComponent = () =>  {
 		  datasets: [
 		    {
 			          label: 'Price',
-			          fill: false,
+			          fill: true,
 			          lineTension: 0.5,
-			          backgroundColor: 'red',
+			          backgroundColor: 'LightGray',
 			          borderColor: 'rgba(0,0,0,1)',
 			          borderWidth: 1,
 			          data: historyStock
@@ -106,20 +105,25 @@ const SearchComponent = () =>  {
 
 	return (
 		<div>
-			<form onSubmit={handleSubmit} id="form">
-			<input 
+			<form onSubmit={handleSubmit} id="form" className='searchBar'>
+			<input
 			type="text"
 			value={ticker}
 			onChange={handleChange}
 			id="search"
 			placeholder="Stock Ticker"
-			name="search"
+			name="search" 
 			/>
 			<button id="searchBtn" type="submit">Search</button>
 		</form>
-			<p>{currentStock}</p>
-			<p>{adjustedStock}</p>
-			<Line
+		<h2 className='h2'>{companyName}</h2>
+		<div className='parent'>
+			<p className='currentStock'>Current Price:</p>
+			<p className='currentStock'>{currentStock} </p>
+			<p className='adjustedStock'>After Hours:</p>
+			<p className='adjustedStock'>{adjustedStock}</p>
+		</div>
+			<Line className='graph'
 				type='line'
 				options={{
 					plugins: {

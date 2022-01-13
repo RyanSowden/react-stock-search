@@ -33,11 +33,34 @@
   }
 }
 
-.searchBar {
-	display: inline;
+.searchBar{
 	text-align: right;
-
-
-
+	height: auto;
+}
+.parent {
+	flex-direction: column;
+	text-align: center;
+	margin-top:50px;
 }
 
+.currentStock {
+	display: inline;
+	text-align: center;
+	padding: 10px;
+}
+
+.adjustedStock {
+	display: inline;
+	text-align: center;
+	padding: 10px;
+}
+
+.graph {
+	max-width: 100%;
+	height: auto;
+	margin-top: 50px;
+}
+
+.h2 {
+	text-align: center;
+}
